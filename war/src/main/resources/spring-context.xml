@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <description>Spring MVC Configuration</description>
+
+    <!-- 加载配置属性文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath*:/my.properties" />
+
+    <!--<import resource="spring-context-disconf.xml" />-->
+
+    <!--<context:annotation-config />-->
+    <context:component-scan base-package="com.lee" />
+    <!-- 使用Annotation自动注册Bean,只扫描@Controller -->
+    <!-- base-package 如果多个，用“,”分隔 -->
+    <!--<context:component-scan base-package="com.lee" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>-->
+
+    <bean id="myDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mywebapp"/>
+        <property name="username" value="test"/>
+        <property name="password" value="test"/>
+    </bean>
+
+    <bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="myDataSource"/>
+        <property name="packagesToScan" value="com.lee.entity"/>
+        <!--<property name="mappingResources">
+            <list>
+                <value>product.hbm.xml</value>
+            </list>
+        </property>-->
+        <property name="hibernateProperties">
+            <value>
+                hibernate.hbm2ddl.auto=update
+            </value>
+            <!--<props>-->
+                <!--<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>-->
+                <!--<prop key="net.sf.ehcache.configurationResourceName">${hibernate.ehcache.configFile}</prop>-->
+                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
+                <!--<prop key="hibernate.cache.use_query_cache">true</prop>-->
+                <!--<prop key="hibernate.search.default.directory_provider">filesystem</prop>-->
+                <!--<prop key="hibernate.search.default.indexBase">${hibernate.search.default.indexBase}</prop>-->
+                <!--<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>-->
+            <!--</props>-->
+        </property>
+    </bean>
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="mySessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!-- 配置 JSR303 Bean Validator 定义 -->
+    <!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />-->
+
+    <!--<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/WEB-INF/velocity/"/>
+        <property name="configLocation" value="classpath*:/velocity.properties"/>
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".vm"/>
+    </bean>-->
+
+    <mvc:annotation-driven />
+    <!-- 默认的注解映射的支持，org.springframewsysWeb.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -->
+    <!--<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">-->
+        <!--<mvc:message-converters register-defaults="true">-->
+            <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+            <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
+                <!--<constructor-arg value="UTF-8" />-->
+            <!--</bean>-->
+            <!-- 将Jackson2HttpMessageConverter的默认格式化输出为true -->
+            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+                <!--<property name="prettyPrint" value="true"/>-->
+                <!--<property name="objectMapper">-->
+                    <!--<bean class="com.hzmux.hzcms.common.mapper.JsonMapper"></bean>-->
+                <!--</property>-->
+            <!--</bean>-->
+            <!-- 使用XML格式输出数据 -->
+            <!--<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">-->
+                <!--<constructor-arg>-->
+                    <!--<bean class="org.springframework.oxm.xstream.XStreamMarshaller">-->
+                        <!--<property name="streamDriver">-->
+                            <!--<bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>-->
+                        <!--</property>-->
+                        <!--<property name="annotatedClasses">-->
+                            <!--<list>-->
+                                <!--<value>com.hzmux.hzcms.common.persistence.BaseEntity</value>-->
+                            <!--</list>-->
+                        <!--</property>-->
+                    <!--</bean>-->
+                <!--</constructor-arg>-->
+                <!--<property name="supportedMediaTypes" value="application/xml"></property>-->
+            <!--</bean>-->
+        <!--</mvc:message-converters>-->
+        <!--<mvc:argument-resolvers>-->
+            <!--<bean class="com.hzmux.hzcms.common.web.SecureModelAttributeMethodArgumentResolver">-->
+                <!--<constructor-arg value="false"/>-->
+            <!--</bean>-->
+        <!--</mvc:argument-resolvers>-->
+    <!--</mvc:annotation-driven>-->
+
+    <!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+    <!--<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+        <property name="mediaTypes" >
+            <map>
+                <entry key="xml" value="application/xml"/>
+                <entry key="json" value="application/json"/>
+            </map>
+        </property>
+        <property name="ignoreAcceptHeader" value="true"/>
+        <property name="favorPathExtension" value="true"/>
+    </bean>-->
+
+    <!-- 视图文件解析配置 -->
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="${web.view.prefix}"/>
+        <property name="suffix" value="${web.view.suffix}"/>
+    </bean>-->
+
+    <!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
+    <!--<mvc:default-servlet-handler/>-->
+
+    <!-- 定义无Controller的path<->view直接映射 -->
+    <!--<mvc:view-controller path="/" view-name="redirect:index.jsp"/>-->
+
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/"/>
+        <!--<property name="configLocation" value="classpath*:/velocity.properties"/>-->
+    </bean>
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="cache" value="true"/>
+        <property name="layoutUrl" value="/WEB-INF/velocity/default.vm"/>
+        <property name="prefix" value="/WEB-INF/velocity/"/>
+        <property name="suffix" value=".vm"/>
+        <!--<property name="exposeSpringMacroHelpers" value="true" />-->
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <!--<property name="viewClass" value="org.springframework.web.servlet.view.velocity.VelocityLayoutView"/>-->
+    </bean>
+
+    <!-- 拦截器配置 -->
+    <!--<mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="${adminPath}/wenwen/carInfo/save" />
+            <bean class="com.hzmux.hzcms.modules.sys.interceptor.ToJsonInterceptor" />
+        </mvc:interceptor>
+        <bean class="com.hzmux.hzcms.modules.sys.interceptor.LogInterceptor" />
+    </mvc:interceptors>-->
+
+    <!-- 支持Shiro对Controller的方法级AOP安全控制 begin-->
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+            </props>
+        </property>
+    </bean>-->
+    <!-- Shiro end -->
+
+    <!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="${web.maxUploadSize}" />
+    </bean>-->
+</beans>

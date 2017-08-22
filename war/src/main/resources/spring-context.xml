@@ -28,7 +28,7 @@
 
     <bean id="myDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/mywebapp"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mywebapp?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC"/>
         <property name="username" value="test"/>
         <property name="password" value="test"/>
     </bean>
@@ -43,6 +43,7 @@
         </property>-->
         <property name="hibernateProperties">
             <value>
+                hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
                 hibernate.hbm2ddl.auto=update
             </value>
             <!--<props>-->
@@ -147,7 +148,7 @@
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
         <property name="cache" value="true"/>
-        <property name="layoutUrl" value="/WEB-INF/velocity/default.vm"/>
+        <property name="layoutUrl" value="/WEB-INF/velocity/layout/default.vm"/>
         <property name="prefix" value="/WEB-INF/velocity/"/>
         <property name="suffix" value=".vm"/>
         <!--<property name="exposeSpringMacroHelpers" value="true" />-->

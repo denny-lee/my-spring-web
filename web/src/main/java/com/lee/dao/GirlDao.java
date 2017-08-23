@@ -1,4 +1,6 @@
 package com.lee.dao;
 
-public class GirlDao {
+import com.lee.entity.GirlFriend;
+
+public interface GirlDao extends BaseDao<GirlFriend>{
 }

@@ -1,3 +1,9 @@
 <h1>Index</h1>
 
 <h2>This is content of welcome.vm</h2>
+
+<form action="save" method="post">
+    <input name="name" type="text"/>
+    <input name="age" type="text">
+    <input type="submit" value="sub" />
+</form>

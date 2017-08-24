@@ -19,16 +19,17 @@ public class BaseDao<T> {
         return sessionFactory.getCurrentSession();
     }
 
-    public void save(T t) {
+    public void save(T t) throws Exception {
         Session session = getSession();
 //        Transaction tx = session.beginTransaction();
-        try {
+//        try {
             session.save(t);
-            session.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+//            session.flush();
+            throw new NullPointerException("aaa");
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //            tx.rollback();
-        }
+//        }
 //        tx.commit();
 //        session.close();
     }

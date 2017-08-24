@@ -16,7 +16,11 @@ public class GirlServiceImpl implements GirlService {
     @Override
     public GirlFriend serve(GirlFriend gf) {
 
-        girlDao.save(gf);
+        try {
+            girlDao.save(gf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return gf;
     }
 }

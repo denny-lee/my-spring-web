@@ -8,8 +8,7 @@
 - mysql
 
 ## view template engine
-velocity
+- velocity
 
 ## Todo list
-- tx
 - mock and test

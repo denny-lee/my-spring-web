@@ -31,21 +31,24 @@ public class WsClient {
         SockJsClient sockJsClient = new SockJsClient(transports);
         WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        String url = "ws://localhost:8080/war/chat";
+        String url = "ws://localhost:8080/chat";
         StompSessionHandler sessionHandler = new MyStompSessionHandler();
         StompSession session = stompClient.connect(url, sessionHandler).get();
         session.subscribe("/topic/ccdd", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return OutMsg.class;
+                return String.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-
+                if (o instanceof String) {
+                    String m = (String) o;
+                    System.out.println(m);
+                }
             }
         });
-        session.send("/topic/ccdd", "{\"name\":\"baba\"}");
+        session.send("/topic/ccdd", "try string.");
         Thread.sleep(60000);
     }
 }

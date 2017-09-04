@@ -15,12 +15,29 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script type="text/javascript" src="/static/js/sockjs.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 <script type="text/javascript">
     $(function () {
 
 
-        var sock = new SockJS("http://localhost:8080/war/myHandler");
-        sock.onopen = function () {
+//        var sock = new SockJS("http://localhost:8080/war/myHandler");
+
+        var wsocket = new SockJS('/war/chat');
+        var client = Stomp.over(wsocket);
+        client.connect({}, function(frame) {
+            client.subscribe('/topic/messages', function (message) {
+//                showMessage(JSON.parse(message.body));
+                console.log(message);
+            });
+        });
+
+        $("#send").click(function () {
+            client.send("/war/chat/aabbc", {}, JSON.stringify({
+                name: $('#msg').val(),
+            }))
+        });
+
+        /*sock.onopen = function () {
             console.log("---connected..---")
         }
         sock.onmessage = function (e) {
@@ -28,6 +45,6 @@
         }
         $("#send").click(function () {
             sock.send(JSON.stringify({type:'text',message: $("#msg").val()}));
-        });
+        });*/
     })
 </script>

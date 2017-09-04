@@ -2,7 +2,11 @@ package com.lee.controller;
 
 import com.lee.entity.GirlFriend;
 import com.lee.service.GirlService;
+import com.lee.ws.OutMsg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,4 +44,5 @@ public class GirlFriendController {
         pw.flush();
         pw.close();
     }
+
 }

@@ -3,6 +3,7 @@ package com.lee.controller;
 import com.lee.entity.GirlFriend;
 import com.lee.service.GirlService;
 import com.lee.ws.OutMsg;
+import com.xinguang.tubobo.launcher.api.OrderStatusServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,6 +23,9 @@ public class GirlFriendController {
     @Autowired
     private GirlService girlService;
 
+    @Autowired
+    private OrderStatusServiceInterface orderStatusService;
+
 //    @RequestMapping("chooseGirl")
 //    public String gfFac() {
 //        return "welcome";
@@ -30,6 +34,7 @@ public class GirlFriendController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String hello(Model model) {
         System.out.println("-------hello world-----");
+        orderStatusService.statusChange("","","");
         return "welcome";
     }
 

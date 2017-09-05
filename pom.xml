@@ -11,6 +11,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <spring.version>4.3.10.RELEASE</spring.version>
     <hibernate.version>5.2.10.Final</hibernate.version>
+    <alibaba.dubbo.version>2.5.3</alibaba.dubbo.version>
+    <zkclient.version>0.1</zkclient.version>
+    <zookeeper.version>3.4.6</zookeeper.version>
   </properties>
  
   <groupId>dev.local</groupId>

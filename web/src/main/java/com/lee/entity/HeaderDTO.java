@@ -1,5 +1,8 @@
 package com.lee.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HeaderDTO {
     private String key;
     private String value;
@@ -19,4 +22,5 @@ public class HeaderDTO {
     public void setValue(String value) {
         this.value = value;
     }
+
 }

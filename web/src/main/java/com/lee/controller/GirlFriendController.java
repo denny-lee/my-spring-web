@@ -31,11 +31,11 @@ public class GirlFriendController {
 //        return "welcome";
 //    }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/dak", method = RequestMethod.GET)
     public String hello(Model model) {
         System.out.println("-------hello world-----");
-        orderStatusService.statusChange("","","");
-        return "welcome";
+//        orderStatusService.statusChange("","","");
+        return "/dak/index";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

@@ -1,10 +1,13 @@
 package com.lee.ws;
 
+import com.lee.AccessLog;
+import com.lee.OrderStatus;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
@@ -25,30 +28,39 @@ public class WsClient {
 
         SockJsClient sockJsClient = new SockJsClient(transports);
         sockJsClient.doHandshake(new MyClientHandler(), "ws://localhost:8080/war/myHandler");*/
+
+
         List<Transport> transports = new ArrayList<>(1);
         transports.add(new WebSocketTransport(new StandardWebSocketClient()));
 
         SockJsClient sockJsClient = new SockJsClient(transports);
         WebSocketStompClient stompClient = new WebSocketStompClient(sockJsClient);
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        String url = "ws://localhost:8080/chat";
+        String url = "ws://localhost:8080/dak/msgcenter";
         StompSessionHandler sessionHandler = new MyStompSessionHandler();
-        StompSession session = stompClient.connect(url, sessionHandler).get();
-        session.subscribe("/topic/ccdd", new StompFrameHandler() {
+        WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+        headers.add("user", "loly");
+        StompSession session = stompClient.connect(url, headers, sessionHandler).get();
+        session.subscribe("/queue/hello/*", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
-                return String.class;
+                return OrderStatus.class;
             }
 
             @Override
             public void handleFrame(StompHeaders stompHeaders, Object o) {
-                if (o instanceof String) {
-                    String m = (String) o;
-                    System.out.println(m);
+                if (o instanceof OrderStatus) {
+                    OrderStatus m = (OrderStatus) o;
+                    System.out.println("OrderNo is:"+m.getOrderNo());
+                    System.out.println("OrderStatus is:"+m.getOrderStatus());
                 }
             }
         });
-        session.send("/topic/ccdd", "try string.");
-        Thread.sleep(60000);
+        OrderStatus a = new OrderStatus();
+        a.setOrderNo("X0001");
+        a.setOrderStatus("UNDELIVERED");
+        Thread.sleep(5000);
+//        session.send("/app/hello/myuserid", a);
+        Thread.sleep(40000);
     }
 }

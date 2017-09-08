@@ -84,7 +84,13 @@ public class HttpUtil {
         setPara();
     }
 
-    public static Resp<Integer, String> getGetResponse(String url, List<HeaderDTO> httpHeaders, String requestData, String encode, int timeout)
+    public static void main(String[] args) throws IOException, HttpException {
+        Resp<Integer, String> resp = getGetResponse("http://www.baidu.com", null);
+        System.out.println(resp.getFirst());
+        System.out.println(resp.getSecond());
+    }
+
+    public static Resp<Integer, String> getGetResponse(String url, List<HeaderDTO> httpHeaders)
             throws HttpException, IOException {
 
         CloseableHttpClient client = null;
@@ -102,40 +108,12 @@ public class HttpUtil {
                 }
             }
             get.setConfig(setTimeouts());
-
-            ResponseHandler<String> rh = new ResponseHandler<String>() {
-
-                @Override
-                public String handleResponse(
-                        final HttpResponse response) throws IOException {
-                    StatusLine statusLine = response.getStatusLine();
-                    HttpEntity entity = response.getEntity();
-                    if (statusLine.getStatusCode() >= 300) {
-                        throw new HttpResponseException(
-                                statusLine.getStatusCode(),
-                                statusLine.getReasonPhrase());
-                    }
-                    if (entity == null) {
-                        throw new ClientProtocolException("Response contains no content");
-                    }
-                    ContentType contentType = ContentType.getOrDefault(entity);
-                    Charset charset = contentType.getCharset();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
-                    String inputLine = null;
-                    StringBuffer sb = new StringBuffer();
-                    while ((inputLine = in.readLine()) != null) {
-                        sb.append(inputLine);
-                    }
-                    in.close();
-                    String str = sb.toString();
-                    return str;
-                }
-            };
-            resultStr = client.execute(get, rh);
+            return client.execute(get, new MyResponseHandler());
         } catch (Exception e) {
-            StringWriter sw = new StringWriter();
+            e.printStackTrace();
+            /*StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
+            e.printStackTrace(pw);*/
 //            log.info(sw.toString());
         } finally {
             get.releaseConnection();
@@ -163,36 +141,8 @@ public class HttpUtil {
             }
             RequestConfig conf = RequestConfig.custom().setConnectTimeout(CONN_OUT_TIME).setSocketTimeout(SO_OUT_TIME).setRedirectsEnabled(false).build();
             mtd.setConfig(conf);
-            mtd.setEntity(new StringEntity(requestData, "application/json", "utf-8"));
-            ResponseHandler<String> rh = new ResponseHandler<String>() {
-
-                @Override
-                public String handleResponse(
-                        final HttpResponse response) throws IOException {
-                    StatusLine statusLine = response.getStatusLine();
-                    HttpEntity entity = response.getEntity();
-                    if (statusLine.getStatusCode() >= 300) {
-                        throw new HttpResponseException(
-                                statusLine.getStatusCode(),
-                                statusLine.getReasonPhrase());
-                    }
-                    if (entity == null) {
-                        throw new ClientProtocolException("Response contains no content");
-                    }
-                    ContentType contentType = ContentType.getOrDefault(entity);
-                    Charset charset = contentType.getCharset();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
-                    String inputLine = null;
-                    StringBuffer sb = new StringBuffer();
-                    while ((inputLine = in.readLine()) != null) {
-                        sb.append(inputLine);
-                    }
-                    in.close();
-                    String str = sb.toString();
-                    return str;
-                }
-            };
-            resultStr = client.execute(mtd, rh);
+            mtd.setEntity(new StringEntity(requestData, "application/json", "utf-8"));;
+            return client.execute(mtd, new MyResponseHandler());
 
         } catch (Exception e) {
             StringWriter sw = new StringWriter();
@@ -220,5 +170,37 @@ public class HttpUtil {
 
     private static RequestConfig setTimeouts() {
         return RequestConfig.custom().setConnectTimeout(CONN_OUT_TIME).setSocketTimeout(SO_OUT_TIME).setRedirectsEnabled(false).build();
+    }
+
+    private static class MyResponseHandler implements ResponseHandler<Resp<Integer, String>> {
+        @Override
+        public Resp<Integer, String> handleResponse(
+                final HttpResponse response) throws IOException {
+
+            StatusLine statusLine = response.getStatusLine();
+            HttpEntity entity = response.getEntity();
+            if (statusLine.getStatusCode() >= 300) {
+                throw new HttpResponseException(
+                        statusLine.getStatusCode(),
+                        statusLine.getReasonPhrase());
+            }
+            if (entity == null) {
+                throw new ClientProtocolException("Response contains no content");
+            }
+            ContentType contentType = ContentType.getOrDefault(entity);
+            Charset charset = contentType.getCharset();
+            if (charset == null) {
+                charset = Charset.forName("UTF-8");
+            }
+            BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
+            String inputLine = null;
+            StringBuffer sb = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            in.close();
+            String str = sb.toString();
+            return new Resp<Integer, String>(statusLine.getStatusCode(), str);
+        }
     }
 }

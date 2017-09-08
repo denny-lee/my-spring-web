@@ -21,8 +21,8 @@
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/war/*</url-pattern>
   </servlet-mapping>
-  <listener>
+  <!--<listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+  </listener>-->
 
 </web-app>

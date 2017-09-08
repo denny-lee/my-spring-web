@@ -4,6 +4,7 @@ public class OutMsg {
     private String text;
     private String topic;
 
+    public OutMsg() {}
     public OutMsg(String text, String topic) {
         this.text = text;
         this.topic = topic;

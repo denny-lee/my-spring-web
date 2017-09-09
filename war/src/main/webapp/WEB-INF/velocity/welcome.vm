@@ -8,7 +8,12 @@
     <input type="submit" value="sub" />
 </form>
 
+$mod
+
+
 <form>
+    <input type="text" name="${_csrf.parameterName}" value='$request.getAttribute("req")' />
+    <input type="text" name="${_csrf.parameterName}" value="$request.getAttribute("_csrf").token" />
     <input type="text" id="msg" />
     <input type="button" id="send" value="send" />
 </form>

@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http
+//				.csrf().disable()
 				// See https://jira.springsource.org/browse/SPR-11496
 				.headers()
 				.addHeaderWriter(

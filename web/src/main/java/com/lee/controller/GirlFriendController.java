@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
@@ -25,6 +26,15 @@ public class GirlFriendController {
 //    public String gfFac() {
 //        return "welcome";
 //    }
+
+    @RequestMapping(value = "/aaa", method = RequestMethod.GET)
+    public String aaa(Model model, HttpServletRequest request) {
+        System.out.println("-------hello world-----");
+//        orderStatusService.statusChange("","","");
+        model.addAttribute("mod", "mod1");
+        request.setAttribute("req", "req1");
+        return "welcome";
+    }
 
     @RequestMapping(value = "/dak", method = RequestMethod.GET)
     public String hello(Model model) {

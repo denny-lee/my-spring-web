@@ -131,9 +131,9 @@
     <!-- 定义无Controller的path<->view直接映射 -->
     <!--<mvc:view-controller path="/" view-name="redirect:index.jsp"/>-->
 
-    <!--<bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
         <property name="resourceLoaderPath" value="/"/>
-        &lt;!&ndash;<property name="configLocation" value="classpath*:/velocity.properties"/>&ndash;&gt;
+        <!--<property name="configLocation" value="classpath:/velocity.properties"/>-->
     </bean>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
@@ -141,10 +141,10 @@
         <property name="layoutUrl" value="/WEB-INF/velocity/layout/default.vm"/>
         <property name="prefix" value="/WEB-INF/velocity/"/>
         <property name="suffix" value=".vm"/>
-        &lt;!&ndash;<property name="exposeSpringMacroHelpers" value="true" />&ndash;&gt;
+        <!--<property name="exposeSpringMacroHelpers" value="true" />-->
         <property name="contentType" value="text/html;charset=UTF-8" />
-        &lt;!&ndash;<property name="viewClass" value="org.springframework.web.servlet.view.velocity.VelocityLayoutView"/>&ndash;&gt;
-    </bean>-->
+        <!--<property name="viewClass" value="org.springframework.web.servlet.view.velocity.VelocityLayoutView"/>-->
+    </bean>
 
     <!--<dubbo:application name="tubobo-launcher" />-->
     <!-- 使用multicast广播注册中心暴露服务地址 -->

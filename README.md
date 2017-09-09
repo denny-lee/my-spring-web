@@ -12,3 +12,7 @@
 
 ## Todo list
 - mock and test
+
+## Mark   
+- csrf,取不到是el没生效
+- jsp使用el头部要加isElIgnore=false

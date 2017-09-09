@@ -146,13 +146,13 @@
         &lt;!&ndash;<property name="viewClass" value="org.springframework.web.servlet.view.velocity.VelocityLayoutView"/>&ndash;&gt;
     </bean>-->
 
-    <dubbo:application name="tubobo-launcher" />
+    <!--<dubbo:application name="tubobo-launcher" />-->
     <!-- 使用multicast广播注册中心暴露服务地址 -->
     <!--<dubbo:registry protocol="zookeeper" group="xinguang" address="172.16.1.181:2181" />-->
-    <dubbo:registry protocol="zookeeper" group="xinguang" address="172.16.1.91:2181" />
+    <!--<dubbo:registry protocol="zookeeper" group="xinguang" address="172.16.1.91:2181" />-->
     <!-- 用dubbo协议在20880端口暴露服务 -->
-    <dubbo:protocol name="dubbo" port="20880"  />
-    <dubbo:reference id="orderStatusService" interface="com.xinguang.tubobo.launcher.api.OrderStatusServiceInterface" group="xinguang" check="false" version="0.0.1"/>
+    <!--<dubbo:protocol name="dubbo" port="20880"  />-->
+    <!--<dubbo:reference id="orderStatusService" interface="com.xinguang.tubobo.launcher.api.OrderStatusServiceInterface" group="xinguang" check="false" version="0.0.1"/>-->
 
     <!--<websocket:handlers>
         <websocket:mapping path="/myHandler" handler="myHandler"/>

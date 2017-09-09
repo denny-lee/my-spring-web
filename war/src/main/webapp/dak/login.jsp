@@ -1,3 +1,4 @@
+<%@ page isELIgnored="false" %>
 <html>
 <head>
 <title>Login</title>
@@ -7,9 +8,9 @@
     <div data-bind="visible: showErrorMessage" class="alert alert-error">
         Invalid username/password.
     </div>
-    <input type="text" value="${_csrf.token}" />
-    <form class="form-signin" method="post" action="login.html">
+    <form class="form-signin" method="post" action="login.jsp">
         <h3 class="muted form-signin-heading">Please sign in</h3>
+        <input type="text" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="text" class="input-block-level" placeholder="User name" name="username">
         <input type="password" class="input-block-level" placeholder="Password" name="password">
         <button class="btn btn-primary" type="submit">Sign in</button>

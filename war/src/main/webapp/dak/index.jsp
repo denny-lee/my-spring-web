@@ -1,8 +1,10 @@
+<%@page isELIgnored="false" %>
 <html>
 <body>
 <h2>dak index!</h2>
 <form>
-    <input type="text" value="${_csrf.token}" />
+    <input type="text" id="token" value="${_csrf.token}" />
+    <input type="text" id="headerName" value="${_csrf.headerName}" />
     <input type="text" id="msg" />
     <input type="button" id="send" value="send" />
     <input type="button" id="connect" value="connect" />
@@ -26,7 +28,9 @@
     function connect() {
         var socket = new SockJS('/war/dak/msgcenter');
         stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
+        var headers = {};
+        headers[$('#headerName').val()] = $('#token').val();
+        stompClient.connect(headers, function (frame) {
             setConnected(true);
             console.log('Connected: ' + frame);
             stompClient.subscribe('/user/queue/hello', function (greeting) {

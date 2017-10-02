@@ -27,19 +27,16 @@ $mod
 
 //        var sock = new SockJS("http://localhost:8080/war/myHandler");
 
-        var wsocket = new SockJS('/war/chat');
+        var wsocket = new SockJS('/war/dak/msgcenter');
         var client = Stomp.over(wsocket);
         client.connect({}, function(frame) {
-            client.subscribe('/topic/messages', function (message) {
-//                showMessage(JSON.parse(message.body));
+            client.subscribe('/queue/hello', function (message) {
                 console.log(message);
             });
         });
 
         $("#send").click(function () {
-            client.send("/war/chat/aabbc", {}, JSON.stringify({
-                name: $('#msg').val(),
-            }))
+            client.send("/app/hello/thingsfuckedup", {}, $('#msg').val())
         });
 
         /*sock.onopen = function () {

@@ -5,11 +5,20 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+　　　　　　　　　　　　<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+　　　　　　　　　　　　　　<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+　　　　　　　　　　　　　　<maxHistory>1</maxHistory>
+　　　　　　　　　　　　</rollingPolicy>
+　　　　　　　　　　　　<encoder>
+　　　　　　　　　　　　　　<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+　　　　　　　　　　　　</encoder>
+　　　　　　　　　　</appender>
     <!-- logback为java中的包 -->
     <logger name="com.lee"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

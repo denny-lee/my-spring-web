@@ -3,7 +3,10 @@ package com.lee.dao;
 import dev.local.ReflectUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.criteria.CriteriaBuilder;
 
 public class BaseDao<T> {
     @Autowired
@@ -33,4 +36,5 @@ public class BaseDao<T> {
 //        tx.commit();
 //        session.close();
     }
+
 }

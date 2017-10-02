@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.List;
 
 
 @Controller
@@ -53,6 +55,12 @@ public class GirlFriendController {
         pw.print("{\"success\": \"true\"}");
         pw.flush();
         pw.close();
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ResponseBody
+    public List<GirlFriend> list() throws Exception {
+        return girlService.listByParams();
     }
 
 }

@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
  * Description:
  * On 2017/9/8 16:06 created by LW
  */
-@Configuration
+//@Configuration
 public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
 
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {

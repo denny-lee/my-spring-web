@@ -28,8 +28,8 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
  *
  * @author Rob Winch
  */
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override

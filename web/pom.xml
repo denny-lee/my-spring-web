@@ -175,11 +175,10 @@
       <artifactId>zookeeper</artifactId>
       <version>${zookeeper.version}</version>
     </dependency>-->
-    <dependency>
+    <!--<dependency>
       <groupId>com.github.sgroschupf</groupId>
       <artifactId>zkclient</artifactId>
       <version>${zkclient.version}</version>
-      <!-- disconf中已有zookeeper-->
       <exclusions>
         <exclusion>
           <groupId>org.apache.zookeeper</groupId>
@@ -190,7 +189,7 @@
           <artifactId>gson</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
+    </dependency>-->
     <!--<dependency>
       <groupId>com.xinguang</groupId>
       <artifactId>tubobo-launcher-api</artifactId>

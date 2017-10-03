@@ -23,4 +23,15 @@ public class WsController {
             return "你什么也没传";
         }
     }
+
+    @MessageMapping("/heartbeat")
+    @SendTo("/queue/heartbeat")
+    public String heart(String str) throws Exception {
+        logger.info("heartbeat: {}", str);
+        if (StringUtils.isNotBlank(str)) {
+            return "pong";
+        } else {
+            return "你什么也没传";
+        }
+    }
 }

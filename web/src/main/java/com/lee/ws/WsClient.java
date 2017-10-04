@@ -3,6 +3,8 @@ package com.lee.ws;
 import com.lee.OrderStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -10,6 +12,7 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -19,6 +22,7 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
 public class WsClient {
     private static final Logger logger = LoggerFactory.getLogger(WsClient.class);
@@ -40,13 +44,17 @@ public class WsClient {
 
 //        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
         stompClient.setMessageConverter(new StringMessageConverter());
-        String url = "ws://192.168.0.105:8080/war/dak/msgcenter";
+        String url = "ws://192.168.0.104:8080/war/dak/msgcenter";
         StompSessionHandler sessionHandler = new MyStompSessionHandler();
 //        WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
 //        headers.add("user", "loly");
         final StompSession session = stompClient.connect(url, sessionHandler).get();
-        TaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.scheduleAtFixedRate(new Runnable() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("temp.xml");
+        TaskScheduler scheduler = (TaskScheduler) context.getBean("taskSchedule");
+        if (null == scheduler) {
+            System.exit(-1);
+        }
+        ScheduledFuture future = scheduler.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 session.send("/app/heartbeat", "ping");
@@ -84,6 +92,8 @@ public class WsClient {
         System.in.read();
         session.disconnect();
         stompClient.stop();
+        future.cancel(false);
+        ((ThreadPoolTaskScheduler)scheduler).shutdown();
 //        OrderStatus a = new OrderStatus();
 //        a.setOrderNo("X0001");
 //        a.setOrderStatus("UNDELIVERED");

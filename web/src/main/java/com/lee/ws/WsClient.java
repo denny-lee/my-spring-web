@@ -36,10 +36,10 @@ public class WsClient {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
         String url = "ws://localhost:8080/dak/msgcenter";
         StompSessionHandler sessionHandler = new MyStompSessionHandler();
-        WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
-        headers.add("user", "loly");
-        StompSession session = stompClient.connect(url, headers, sessionHandler).get();
-        session.subscribe("/queue/hello/*", new StompFrameHandler() {
+//        WebSocketHttpHeaders headers = new WebSocketHttpHeaders();
+//        headers.add("user", "loly");
+        StompSession session = stompClient.connect(url, sessionHandler).get();
+        session.subscribe("/queue/tbb/orderStatus", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders stompHeaders) {
                 return OrderStatus.class;
@@ -55,10 +55,10 @@ public class WsClient {
             }
         });
         OrderStatus a = new OrderStatus();
-        a.setOrderNo("X0001");
-        a.setOrderStatus("UNDELIVERED");
-        Thread.sleep(5000);
-//        session.send("/app/hello/myuserid", a);
-        Thread.sleep(40000);
+        a.setOrderNo("AAA0001111");
+        a.setOrderStatus("CANCEL");
+        a.setTimestamp(1505717265896L);
+        session.send("/app/echo/tbb", a);
+        Thread.sleep(60000);
     }
 }

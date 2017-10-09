@@ -12,6 +12,11 @@
     <!--<input type="text" id="ses" />-->
     <!--<input type="button" id="sendToClient" value="sendToClient" />-->
 </form>
+<%--<input type="button" id="logout" value="logout">--%>
+<form action="logout.html" method="post">
+    <input type="submit" value="Log out"/>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+</form>
 </body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
 <script type="text/javascript" src="/static/js/sockjs.js"></script>
@@ -71,6 +76,11 @@
         $( "#disconnect" ).click(function() { disconnect(); });
         $( "#send" ).click(function() { sendName(); });
 //        $( "#sendToClient" ).click(function() { sendToClient(); });
+        /*$('#logout').click(function () {
+            stompClient.disconnect();
+            window.location.href = "logout.html";
+        });*/
+
     })
 </script>
 </html>

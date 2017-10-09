@@ -2,11 +2,13 @@ package com.lee.controller;
 
 import com.lee.entity.GirlFriend;
 import com.lee.service.GirlService;
+import com.lee.service.MsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +20,8 @@ import java.io.PrintWriter;
 public class GirlFriendController {
     @Autowired
     private GirlService girlService;
+    @Autowired
+    private MsgService msgService;
 
 //    @Autowired
 //    private OrderStatusServiceInterface orderStatusService;
@@ -34,6 +38,20 @@ public class GirlFriendController {
         model.addAttribute("mod", "mod1");
         request.setAttribute("req", "req1");
         return "welcome";
+    }
+
+    @RequestMapping(value = "/bbb", method = RequestMethod.GET)
+    @ResponseBody
+    public void bbb(Model model, HttpServletRequest request) {
+        System.out.println("-------bbb-----");
+//        for (int i = 0; i < 10; i++) {
+            msgService.send("meeeeeeeeesssssssage");
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @RequestMapping(value = "/dak", method = RequestMethod.GET)

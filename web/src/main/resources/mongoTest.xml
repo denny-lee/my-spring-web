@@ -6,9 +6,19 @@
     <bean id="mongoClient" class="dev.local.mongo.MongoFactoryBean">
         <property name="servers">
             <array>
-                <value>127.0.0.1</value>
+                <value>172.16.1.91</value>
             </array>
         </property>
+        <property name="mongoCredentials">
+            <array>
+                <ref bean="mongoCredential"/>
+            </array>
+        </property>
+    </bean>
+    <bean name="mongoCredential" class="dev.local.mongo.MongoCredentialFactoryBean">
+        <property name="dbName" value="test" />
+        <property name="user" value="test" />
+        <property name="pwd" value="test" />
     </bean>
     <bean id="morphia" class="dev.local.mongo.MorphiaFactoryBean">
         <property name="mapPackages">
@@ -21,7 +31,7 @@
     <bean id="datastore" class="dev.local.mongo.DataStoreFactoryBean">
         <property name="morphia" ref="morphia"/>
         <property name="mongoClient" ref="mongoClient"/>
-        <property name="dbName" value="test"/>
+        <property name="dbName" value="liwtest"/>
         <property name="toEnsureIndex" value="true"/>
         <property name="toEnsureCaps" value="true"/>
     </bean>

@@ -1,9 +1,6 @@
 package dev.local.mongo;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 import java.util.ArrayList;
@@ -11,6 +8,7 @@ import java.util.List;
 
 public class MongoFactoryBean extends AbstractFactoryBean<MongoClient> {
     private String[] servers;
+    private List<MongoCredential> mongoCredentials;
     private MongoClientOptions mongoClientOptions = new MongoClientOptions.Builder().build();
 
     @Override
@@ -22,9 +20,9 @@ public class MongoFactoryBean extends AbstractFactoryBean<MongoClient> {
     protected MongoClient createInstance() throws Exception {
         MongoClient mongoClient = null;
         if (null != mongoClientOptions) {
-            mongoClient = new MongoClient(getServerList(), mongoClientOptions);
+            mongoClient = new MongoClient(getServerList(), mongoCredentials, mongoClientOptions);
         } else {
-            mongoClient = new MongoClient(getServerList());
+            mongoClient = new MongoClient(getServerList(), mongoCredentials);
         }
         return mongoClient;
     }
@@ -63,5 +61,13 @@ public class MongoFactoryBean extends AbstractFactoryBean<MongoClient> {
 
     public void setMongoClientOptions(MongoClientOptions mongoClientOptions) {
         this.mongoClientOptions = mongoClientOptions;
+    }
+
+    public List<MongoCredential> getMongoCredentials() {
+        return mongoCredentials;
+    }
+
+    public void setMongoCredentials(List<MongoCredential> mongoCredentials) {
+        this.mongoCredentials = mongoCredentials;
     }
 }

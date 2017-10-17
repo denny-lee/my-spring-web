@@ -1,10 +1,13 @@
 package dev.local;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.model.Aggregates;
 import dev.local.mongo.dao.TeacherDao;
 import dev.local.mongo.model.Group;
 import dev.local.mongo.model.Teacher;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.aggregation.Accumulator;
 import org.mongodb.morphia.aggregation.AggregationPipeline;
 import org.mongodb.morphia.aggregation.Projection;
@@ -47,13 +50,36 @@ public class MongoTools {
         dao.deleteTeacher(t2.getId());*/
     }
 
+    private static class Fmt {
+        private String format;
+        private String date;
+
+        public String getFormat() {
+            return format;
+        }
+
+        public void setFormat(String format) {
+            this.format = format;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+    }
     private static void aggregateTest(TeacherDao dao) {
         Datastore ds = dao.getDatastore();
         Query<Object> q = ds.getQueryFactory().createQuery(ds);
-        Projection secToMs = expression("$month", "$createGmt");
-        AggregationPipeline pipeline = ds.createAggregation(Teacher.class).project(projection("month", secToMs))
+        BasicDBObject fmt = new BasicDBObject();
+        fmt.append("format", "%Y-%m-%d");
+        fmt.append("date", "$createGmt");
+        Projection func = expression("$dateToString", fmt);
+        AggregationPipeline pipeline = ds.createAggregation(Teacher.class).project(projection("newDate", func))
                 .group(
-                        id(grouping("month")),
+                        id(grouping("newDate")),
                         grouping("count", new Accumulator("$sum", 1)),
                         grouping("totalAge", sum("age"))
                 )

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <bean id="mongoClient" class="dev.local.mongo.MongoFactoryBean">
+        <property name="servers">
+            <array>
+                <value>127.0.0.1</value>
+            </array>
+        </property>
+    </bean>
+    <bean id="morphia" class="dev.local.mongo.MorphiaFactoryBean">
+        <property name="mapPackages">
+            <array>
+                <value>dev.local.mongo.model</value>
+            </array>
+        </property>
+        <property name="ignore" value="false"/>
+    </bean>
+    <bean id="datastore" class="dev.local.mongo.DataStoreFactoryBean">
+        <property name="morphia" ref="morphia"/>
+        <property name="mongoClient" ref="mongoClient"/>
+        <property name="dbName" value="test"/>
+        <property name="toEnsureIndex" value="true"/>
+        <property name="toEnsureCaps" value="true"/>
+    </bean>
+
+    <context:component-scan base-package="dev.local.mongo.dao" />
+</beans>
